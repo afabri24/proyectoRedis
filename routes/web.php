@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\SignupController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,27 +33,18 @@ Route::get('/obtener-usuario', function () {
     return response()->json($user);
 });
 
-Route::get('/signup', function () {
-    return view('registro');
-});
-
 Route::get('/ver-claves', function () {
     $keys = Redis::keys('*');
 
     return response()->json($keys);
 });
 
+Route::get('/signup', [SignupController::class,'showRegistrationForm']);
+
+
+
 // Registrar un usuario
-Route::post('/registrar-usuario', function (Request $request) {
-    $user = [
-        'nombreUsuario' => $request->nombre,
-        'password' => Hash::make($request->password),
-    ];
-
-    Redis::hmset('user:' . $request->nombre, $user);
-
-    return redirect('/ver-todo')->with('status', 'Usuario registrado con éxito!');
-});
+Route::post('/registrar-usuario', [SignupController::class,'register']);
 
 Route::get('/ver-todo', function () {
     $keys = Redis::keys('*');
@@ -72,7 +67,7 @@ Route::delete('/eliminar-usuario/{nombre}', function ($nombre) {
 Route::put('/actualizar-usuario/{nombre}', function (Request $request, $nombre) {
     $user = [
         'nombre' => $request->input('nombre'),
-        'contraseia' => Hash::make($request->input('password')),
+        'password' => Hash::make($request->input('password')),
     ];
 
     Redis::hmset('user:' . $nombre, $user);
@@ -80,24 +75,17 @@ Route::put('/actualizar-usuario/{nombre}', function (Request $request, $nombre) 
     return redirect('/')->with('status', 'Usuario actualizado con éxito!');
 });
 
-Route::get('/login', function () {
-    return view('inicioSesion');
+Route::get('/login',[loginController::class,'showLoginForm'])->name('login');
+
+Route::post('/login', [loginController::class,'login']);
+
+Route::get('/logout', function () {
+    session()->forget('nombre');
+    session()->forget('authenticated');
+
+    return redirect('/')->with('status', 'Cierre de sesión exitoso!');
 });
 
-Route::post('/login', function (Request $request) {
-    $nombre = $request->input('nombre');
-    $password = $request->input('password');
-
-    $user = Redis::hgetall('user:' . $nombre);
-
-    if ($user && Hash::check($password, $user['password'])) {
-        // Iniciar sesión y redirigir al usuario
-        session(['nombre' => $nombre]);
-        return redirect('/')->with('status', 'Inicio de sesión exitoso!');
-    } else {
-        // Redirigir al usuario con un mensaje de error
-        return redirect('/login')->with('error', 'Nombre de usuario o contraseña incorrectos.');
-    }
-});
+Route::get('/home', [HomeController::class,'index']);
 
 ?>
