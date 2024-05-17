@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SoundsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
@@ -88,4 +89,10 @@ Route::get('/logout', function () {
 
 Route::get('/home', [HomeController::class,'index']);
 
-?>
+
+
+Route::post('/sound',[SoundsController::class,'store']);
+
+Route::get('/sounds', [SoundsController::class,'showAll']);
+
+Route::delete('/sound/{id}', [SoundsController::class,'destroy']);
