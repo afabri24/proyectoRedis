@@ -115,7 +115,11 @@
                 return response.json();
             }).then(function(data) {
                 console.log('Sonido guardado con éxito:', data);
-                addItemModal.hide();
+                alert('Sonido guardado con éxito');
+                // Reload the page to show the new item
+                window.location.reload();
+                //limpiar formulario
+                form.reset();
             }).catch(function(error) {
                 console.error('Error:', error);
             });
