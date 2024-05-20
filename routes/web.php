@@ -7,92 +7,36 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\SignupController;
-
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hola-mundo', 'App\Http\Controllers\Controller@HolaMUNDO');
+Route::get('/login', [LoginController::class, 'index'])->name('login');
 
-Route::get('/crear-usuario', function () {
-    $user = [
-        'nombre' => 'juan',
-        'correo' => 'juan123@gmail.com',
-        'contraseña' => '123456789'
-    ];
+Route::get('/signup', [SignupController::class, 'index']);
 
-    Redis::hMset('user:juan2', $user);
+Route::post('/usuario/login', [LoginController::class, 'login']);
 
-    return response()->json(['message' => 'Usuario creado en Redis']);
-});
+Route::get('/usuario/logout', [LogoutController::class, 'logout']);
 
-Route::get('/obtener-usuario', function () {
-    $user = Redis::hgetall('user:juan2');
+Route::post('/usuario/registrar', [SignupController::class, 'store']);
 
-    return response()->json($user);
-});
+Route::delete('/usuario/{nombre}', [UserController::class, 'delete']);
 
-Route::get('/ver-claves', function () {
-    $keys = Redis::keys('*');
+Route::put('/usuario/{nombre}', [UserController::class, 'update']);
 
-    return response()->json($keys);
-});
+Route::get('/usuario/{usuario}', [UserController::class, 'show']);
 
-Route::get('/signup', [SignupController::class,'showRegistrationForm']);
+Route::get('/usuario', [UserController::class, 'showAll']);
 
+Route::get('/home', [HomeController::class, 'index']);
 
+Route::post('/sound', [SoundsController::class, 'store']);
 
-// Registrar un usuario
-Route::post('/registrar-usuario', [SignupController::class,'register']);
+Route::get('/sounds', [SoundsController::class, 'showAll']);
 
-Route::get('/ver-todo', function () {
-    $keys = Redis::keys('*');
-    $data = [];
-
-    foreach ($keys as $key) {
-        $data[$key] = Redis::hgetall($key);
-    }
-
-    return response()->json($data);
-});
-
-Route::delete('/eliminar-usuario/{nombre}', function ($nombre) {
-    Redis::del('user:' . $nombre);
-
-    return redirect('/')->with('status', 'Usuario eliminado con éxito!');
-});
-
-
-Route::put('/actualizar-usuario/{nombre}', function (Request $request, $nombre) {
-    $user = [
-        'nombre' => $request->input('nombre'),
-        'password' => Hash::make($request->input('password')),
-    ];
-
-    Redis::hmset('user:' . $nombre, $user);
-
-    return redirect('/')->with('status', 'Usuario actualizado con éxito!');
-});
-
-Route::get('/login',[loginController::class,'showLoginForm'])->name('login');
-
-Route::post('/login', [loginController::class,'login']);
-
-Route::get('/logout', function () {
-    session()->forget('nombre');
-    session()->forget('authenticated');
-
-    return redirect('/')->with('status', 'Cierre de sesión exitoso!');
-});
-
-Route::get('/home', [HomeController::class,'index']);
-
-
-
-Route::post('/sound',[SoundsController::class,'store']);
-
-Route::get('/sounds', [SoundsController::class,'showAll']);
-
-Route::delete('/sound/{id}', [SoundsController::class,'destroy']);
+Route::delete('/sound/{id}', [SoundsController::class, 'destroy']);

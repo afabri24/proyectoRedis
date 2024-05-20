@@ -12,7 +12,7 @@
                     <div class="card-header">Registro de Usuario</div>
 
                     <div class="card-body">
-                        <form method="POST" action="/registrar-usuario">
+                        <form method="POST" action="/usuario/registrar">
                             @csrf
 
                             <div class="form-group row">

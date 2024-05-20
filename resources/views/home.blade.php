@@ -41,8 +41,8 @@
         </div>
         <div class="d-flex justify-content-between mb-3">
             <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addItemModal">Agregar +</a>
-            <a href="/usuarios" class="btn btn-secondary">Usuarios</a>
-            <a href="/logout" class="btn btn-danger">Cerrar Sesión</a>
+            <a href="/usuario" class="btn btn-secondary">Usuarios</a>
+            <a href="/usuario/logout" class="btn btn-danger">Cerrar Sesión</a>
         </div>
 
         <ul class="list-group">
