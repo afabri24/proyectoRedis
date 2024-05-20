@@ -8,19 +8,19 @@ use Illuminate\Support\Facades\Redis;
 
 class SignupController extends Controller
 {
-    public function showRegistrationForm()
+    public function index()
     {
         return view('registro');
     }
 
-    public function register(Request $request)
+    public function store(Request $request)
     {
         $user = [
             'usuario' => $request->usuario,
             'password' => Hash::make($request->password),
         ];
 
-        Redis::hmset('user:' . $request->nombre, $user);
+        Redis::hmset('user:' . $request->usuario, $user);
 
         return redirect('/login')->with('status', 'Usuario registrado con éxito!');
     }

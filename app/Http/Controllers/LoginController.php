@@ -10,25 +10,25 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function showLoginForm()
+    public function index()
     {
-        return view('inicioSesion');
+        return view('login');
     }
 
     public function login(Request $request)
-{
-    $usuario = $request->input('usuario');
-    $password = $request->input('password');
+    {
+        $usuario = $request->input('usuario');
+        $password = $request->input('password');
 
-    $user = Redis::hgetall('user:' . $usuario);
+        $user = Redis::hgetall('user:' . $usuario);
 
-    if ($user && Hash::check($password, $user['password'])) {
-        // Establecer una variable de sesión para indicar que el usuario está autenticado
-        $request->session()->put('authenticated', true);
-        $request->session()->put('user', $usuario);
-        return redirect('/home')->with('status', 'Inicio de sesión exitoso!');
-    } else {
-        return redirect('/login')->with('error', 'Nombre de usuario o contraseña incorrectos.');
+        if ($user && Hash::check($password, $user['password'])) {
+            // Establecer una variable de sesión para indicar que el usuario está autenticado
+            $request->session()->put('authenticated', true);
+            $request->session()->put('user', $usuario);
+            return redirect('/home')->with('status', 'Inicio de sesión exitoso!');
+        } else {
+            return redirect('/login')->with('error', 'Nombre de usuario o contraseña incorrectos.');
+        }
     }
-}
 }

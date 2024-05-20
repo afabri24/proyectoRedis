@@ -21,7 +21,7 @@
                     <div class="card-header">Iniciar Sesión</div>
 
                     <div class="card-body">
-                        <form method="POST" action="/login">
+                        <form method="POST" action="/usuario/login">
                             @csrf
 
                             <div class="form-group row">
