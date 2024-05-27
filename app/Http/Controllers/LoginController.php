@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -19,6 +20,9 @@ class LoginController extends Controller
     {
         $usuario = $request->input('usuario');
         $password = $request->input('password');
+
+        Log::info('usuario'.$usuario);
+        Log::info('passsword'.$password);
 
         $user = Redis::hgetall('user:' . $usuario);
 

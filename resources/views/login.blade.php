@@ -25,11 +25,11 @@
                             @csrf
 
                             <div class="form-group row">
-                                <label for="nombre" class="col-md-4 col-form-label text-md-right">Nombre de
+                                <label for="usuario" class="col-md-4 col-form-label text-md-right">Nombre de
                                     Usuario</label>
 
                                 <div class="col-md-6">
-                                    <input id="nombre" type="text" class="form-control" name="nombre" required
+                                    <input id="usuario" type="text" class="form-control" name="usuario" required
                                         autofocus>
                                 </div>
                             </div>
