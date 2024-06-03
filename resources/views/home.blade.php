@@ -51,7 +51,6 @@
                     <button class="btn btn-info play-sound" data-sound="{{ $item->sound }}">Reproducir</button>
                     {{ $item->name }}
                     <div>
-                        <a href="/editar/" class="btn btn-warning">Editar</a>
                         <button class="btn btn-danger delete-item" data-id="{{ $item->id }}">Eliminar</button>
                     </div>
                 </li>
