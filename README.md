@@ -2,6 +2,10 @@
 
 Proyecto de desarrollo web con enfoque en uso de bases de datos no relacionales para la Experiencia Educativa Bases de Datos no Convencionales de la [Facultad de Estadística e Informatica](https://www.uv.mx/fei/) de la [Universidad Veracruzana](https://www.uv.mx/) utilizando Redis y replicación
 
+## Documentación
+
+La documentación solicitada está en la carpeta `/documentacion`
+
 ## Configuración
 
 Se presupone que la terminal se encuentra en el directorio del proyecto actual
