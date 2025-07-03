@@ -6,6 +6,8 @@ Proyecto de desarrollo web con enfoque en uso de bases de datos no relacionales 
 
 Se presupone que la terminal se encuentra en el directorio del proyecto actual
 
+Se incluye un .env.example para la modificación donde se debe conectar a la base de datos de redis, con su contraseña que debe coincidir con la configuración de que se encuentra en la carpeta redis donde se encuentran los archivos de configuración para los servidores de redis.
+
 ### Configurar red
 
 ~~~ docker
@@ -14,17 +16,28 @@ docker network create redis-network
 
 ### Ejecutar servidores
 
+#### Ejecutar Automaticamente
+
+```
+docker-compose up -d
+```
+
+
+#### Ejecutar manualmente
+
 Ejecutar el servidor maestro:
 
-~~~ docker
+```
 docker run -d --name redis-maestro --network redis-network -p 6379:6379 -v $pwd/redis/redis-maestro.conf:/usr/local/etc/redis/redis.conf redis:alpine redis-server /usr/local/etc/redis/redis.conf
-~~~
+```
 
 Ejecutar el servidor esclavo:
 
-~~~ docker
+```
 docker run -d --name redis-esclavo --network redis-network -v $pwd/redis/redis-esclavo.conf:/usr/local/etc/redis/redis.conf redis:alpine redis-server /usr/local/etc/redis/redis.conf
-~~~
+```
+
+Nota: si no funciona el comando cambia "$pwd/redis/redis-esclavo.conf" con tu ruta absoluta ejemplo:"C:\Users\usuario\proyectoBasesDatosNoCovencionales\redis\redis-esclavo.conf"
 
 ### Verificar conexion
 
