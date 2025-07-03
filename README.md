@@ -2,6 +2,10 @@
 
 Proyecto de desarrollo web con enfoque en uso de bases de datos no relacionales para la Experiencia Educativa Bases de Datos no Convencionales de la [Facultad de Estadística e Informatica](https://www.uv.mx/fei/) de la [Universidad Veracruzana](https://www.uv.mx/) utilizando Redis y replicación
 
+## Documentación
+
+La documentación solicitada está en la carpeta `/documentacion`
+
 ## Configuración
 
 Se presupone que la terminal se encuentra en el directorio del proyecto actual
@@ -51,30 +55,6 @@ Debe salir algo parecido a esto:
 
 ~~~
 # Replication
-role:slave
-master_host:redis-maestro
-master_port:6379
-master_link_status:up
-master_last_io_seconds_ago:4
-master_sync_in_progress:0
-slave_read_repl_offset:14
-slave_repl_offset:14
-slave_priority:100
-slave_read_only:1
-replica_announced:1
-connected_slaves:0
-~~~
-
-Verificar conexión del servidor esclavo
-
-~~~ docker
-docker exec -it redis-esclavo redis-cli INFO replication
-~~~
-
-Debe salir algo parecido a:
-
-~~~
-# Replication
 role:master
 connected_slaves:1
 slave0:ip=172.18.0.3,port=6379,state=online,offset=126,lag=1
@@ -89,11 +69,60 @@ repl_backlog_first_byte_offset:1
 repl_backlog_histlen:126
 ~~~
 
-### Montar volumen (opcional)
+Verificar conexión del servidor esclavo
 
+~~~ docker
+docker exec -it redis-esclavo redis-cli INFO replication
+~~~
 
-El docker run de redis es:
+Debe salir algo parecido a:
 
-docker run --name my-redis -p 6379:6379 -d redis:alpine
+~~~
+# Replication
+role:slave
+master_host:redis-maestro
+master_port:6379
+master_link_status:up
+master_last_io_seconds_ago:4
+master_sync_in_progress:0
+slave_read_repl_offset:14
+slave_repl_offset:14
+slave_priority:100
+slave_read_only:1
+replica_announced:1
+connected_slaves:0
+~~~
 
-Asi corres el servidor
+### Configurar .env
+
+Al archivo .env además de generar un APP_KEY
+
+Comentar todo DB_[]
+
+~~~
+# DB_CONNECTION=sqlite
+# DB_HOST=127.0.0.1
+# DB_PORT=3306
+# DB_DATABASE=laravel
+# DB_USERNAME=root
+# DB_PASSWORD=
+~~~
+
+Asignar el driver de sesión, el queue de conexión, driver de caché a redis,
+
+~~~
+SESSION_DRIVER=redis
+...
+QUEUE_CONNECTION=redis
+
+CACHE_DRIVER=redis
+~~~
+
+Y poner los datos necesarios para la conexión a la instancia del contenedor de redis
+
+~~~
+REDIS_CLIENT=predis
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=redis_password1234
+REDIS_PORT=6379 
+~~~
